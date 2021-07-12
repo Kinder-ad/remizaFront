@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {SpotifyServiceService} from "./spotify-service.service";
 import {Track} from '../domain/Track';
-import {Observable} from "rxjs";
 import {TrackCurrent} from "../domain/TrackCurrent";
-
+import {map} from "rxjs/operators";
+import {KeyValuePipe} from "@angular/common";
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit{
   title = 'RemizaFronte';
@@ -24,6 +24,8 @@ export class AppComponent implements OnInit{
   clickVote: any = 1;
   counterVote: number;
   num: number = 0;
+  trackVotesQueue: Map<Track, number>;
+   keyvalue: any ;
 
   constructor(private userService: SpotifyServiceService){
     this.tracks = [];
@@ -34,6 +36,8 @@ export class AppComponent implements OnInit{
     this.kolejka = false;
     this.jakiprocent = 0;
     this.counterVote = 0;
+    this.trackVotesQueue  = new Map<Track, number>();
+    this.keyvalue = new KeyValuePipe();
   }
 
 
@@ -41,6 +45,7 @@ export class AppComponent implements OnInit{
     this.userService.authorize();
     this.userService.getSongs().subscribe((data => {
       this.tracks = data;
+      this.searchDuplicate();
     }));
     this.userService.getQueue().subscribe((data => {
       this.tracksQueue = data;
@@ -72,7 +77,7 @@ export class AppComponent implements OnInit{
 
 
       });
-
+      this.setVotesOnSongs();
     },1000);
 
 
@@ -154,6 +159,19 @@ export class AppComponent implements OnInit{
         }
       }
     }
+    searchDuplicate() {
+    this.tracks.filter((data)=>{
+      if(this.tracks.forEach((data)=>{
+        return data.name;
+      }) == data.name) {
+        return null;
+      }else{
+        return data;
+      }
+        });
+    }
+
+
    msToTime(duration: number) {
     var milliseconds = Math.floor((duration % 1000) / 100),
       seconds: any = Math.floor((duration / 1000) % 60),
@@ -166,5 +184,14 @@ export class AppComponent implements OnInit{
 
     return  minutes + ":" + seconds ;
   }
-
+  addVoteToSong(track: Track){
+    this.userService.addVoteToSong(track).subscribe((data)=>{
+      console.log(data);
+    })
+  }
+   setVotesOnSongs(){
+      this.userService.getVoteOnSongs().pipe(map( response => {
+          this.trackVotesQueue = response;
+        }));
+  }
 }

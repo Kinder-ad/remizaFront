@@ -53,4 +53,12 @@ export class SpotifyServiceService {
   clearVote(){
     return this.http.get(this.url+'/song/queue/clearVote');
   }
+
+  addVoteToSong(track: Track) {
+    return this.http.post<Track>(this.url+"/song/queue/songvote",track);
+  }
+
+  getVoteOnSongs() {
+    return this.http.get<Map<Track,number>>(this.url+'/song/queue/songvote/');
+  }
 }

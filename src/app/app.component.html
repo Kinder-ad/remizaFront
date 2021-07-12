@@ -79,11 +79,13 @@
         <th></th>
       </tr>
       </thead>
-      <tbody *ngFor="let track of tracksQueue">
+      <div *ngFor="let t of trackVotesQueue | keyvalue: asIsOrder">
+      </div>
+      <tbody *ngFor="let track of this.trackVotesQueue | ">
       <tr>
-        <td><img width="100px" height="100px"  src="{{track.url}}"> </td>
-        <td>{{track.name}}</td>
-        <td> <button class="waves-effect btn-flat red btn-small" (click)="deleteSongFromQueue(track)">Usuń</button>
+        <td><img width="100px" height="100px"  src="{{track.getKey().g}}"> </td>
+        <td>{{track.key.name}}</td>
+        <td> <button class="waves-effect btn-flat red btn-small"></button>
         </td>
       </tr>
       </tbody>
@@ -93,5 +95,4 @@
 </div>
 </div>
 </div>
-
   <a class="amber-text" style="font-family: 'Hiragino Kaku Gothic StdN'">© 2021 Adrian Grenda</a>
