@@ -73,19 +73,19 @@
       <div class="myDIV" style="height: 634px">
     <table>
       <thead>
+      <div *ngIf="czyMozeszVote===true">MOŻESZ</div>
+      <div *ngIf="czyMozeszVote===false">NIE MOŻESZ</div>
       <tr>
         <th>{{this.num | minutetoseconds}} /5:00min</th>
         <th></th>
         <th></th>
       </tr>
       </thead>
-      <div *ngFor="let t of trackVotesQueue | keyvalue: asIsOrder">
-      </div>
-      <tbody *ngFor="let track of this.trackVotesQueue | ">
+      <tbody *ngFor="let track of this.tracksQueue">
       <tr>
-        <td><img width="100px" height="100px"  src="{{track.getKey().g}}"> </td>
-        <td>{{track.key.name}}</td>
-        <td> <button class="waves-effect btn-flat red btn-small"></button>
+        <td><img width="100px" height="100px"  src="{{track.trackJson.url}}"></td>
+        <td>{{track.trackJson.name}}</td>
+        <td> <button [ngClass]="czyMozeszVote ? 'waves-effect btn-flat green btn-small' : 'waves-effect btn-flat red btn-small'" class="waves-effect btn-flat red btn-small"  (click)="addVoteOnSong(track.trackJson.name)">{{track.ile_glosow}}/5</button>
         </td>
       </tr>
       </tbody>

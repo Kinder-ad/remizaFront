@@ -4,6 +4,7 @@ import {Observable} from "rxjs";
 import {Track} from "../domain/Track";
 import {TrackCurrent} from "../domain/TrackCurrent";
 import {tap} from "rxjs/operators";
+import {TrackPack} from "../domain/TrackPack";
 
 
 @Injectable({
@@ -28,10 +29,10 @@ export class SpotifyServiceService {
   }
   public addSongToQueue(track: Track) {
     console.log(track)
-    return this.http.post<Track>(this.url+'/song',track);
+    return this.http.post<TrackPack>(this.url+'/song',track);
   }
-  getQueue(): Observable<Track[]> {
-    return this.http.get<Track[]>(this.url+'/getQueue');
+  getQueue(): Observable<TrackPack[]> {
+    return this.http.get<TrackPack[]>(this.url+'/getQueue');
   }
 
   deleteSongQueue(track: Track) {
@@ -54,11 +55,8 @@ export class SpotifyServiceService {
     return this.http.get(this.url+'/song/queue/clearVote');
   }
 
-  addVoteToSong(track: Track) {
-    return this.http.post<Track>(this.url+"/song/queue/songvote",track);
+  sendVoteOnSong(name: string) {
+    return this.http.get(this.url+'/song/queue/'+name);
   }
 
-  getVoteOnSongs() {
-    return this.http.get<Map<Track,number>>(this.url+'/song/queue/songvote/');
-  }
 }

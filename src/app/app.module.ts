@@ -7,6 +7,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {RouterModule} from "@angular/router";
 import {StorageServiceModule} from "ngx-webstorage-service";
 import { MinutetosecondsPipe } from './minutetoseconds.pipe';
+
 function RoutingAppModule() {
 
 }

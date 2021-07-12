@@ -3,7 +3,7 @@ import {SpotifyServiceService} from "./spotify-service.service";
 import {Track} from '../domain/Track';
 import {TrackCurrent} from "../domain/TrackCurrent";
 import {map} from "rxjs/operators";
-import {KeyValuePipe} from "@angular/common";
+import {TrackPack} from "../domain/TrackPack";
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -12,21 +12,17 @@ import {KeyValuePipe} from "@angular/common";
 export class AppComponent implements OnInit{
   title = 'RemizaFronte';
   tracks: Track[] = [];
-  tracksQueue: Track[] = [];
+  tracksQueue: TrackPack[] = [];
   trackCurrent: TrackCurrent;
   czyZapelniona: boolean;
   czyPowtarzaSie: boolean;
   kolejka: boolean;
   jakiprocent: Number;
   imie_wyszukane: any;
-  wyszukany_obiekt: any;
   wyszukiwarka: any;
-  clickVote: any = 1;
   counterVote: number;
   num: number = 0;
-  trackVotesQueue: Map<Track, number>;
-   keyvalue: any ;
-
+  czyMozeszVote: boolean;
   constructor(private userService: SpotifyServiceService){
     this.tracks = [];
     this.tracksQueue = [];
@@ -36,8 +32,7 @@ export class AppComponent implements OnInit{
     this.kolejka = false;
     this.jakiprocent = 0;
     this.counterVote = 0;
-    this.trackVotesQueue  = new Map<Track, number>();
-    this.keyvalue = new KeyValuePipe();
+    this.czyMozeszVote = false;
   }
 
 
@@ -45,7 +40,6 @@ export class AppComponent implements OnInit{
     this.userService.authorize();
     this.userService.getSongs().subscribe((data => {
       this.tracks = data;
-      this.searchDuplicate();
     }));
     this.userService.getQueue().subscribe((data => {
       this.tracksQueue = data;
@@ -72,12 +66,11 @@ export class AppComponent implements OnInit{
         this.updateList();
 
         if(this.msToTime(this.trackCurrent.durationMs)>=this.msToTime(this.trackCurrent.progressMs-9000)){
-          this.userService.addSong(this.tracksQueue[0]);
+          this.userService.addSong(this.tracksQueue[0].trackJson);
         }
 
 
       });
-      this.setVotesOnSongs();
     },1000);
 
 
@@ -85,14 +78,18 @@ export class AppComponent implements OnInit{
       if(localStorage.getItem('currentUp') === null || isNaN(Number(localStorage.getItem('currentUp')))){
         localStorage.setItem('currentUp',String(this.num));
       }else {
-        if(this.num>=200 ){
-          localStorage.removeItem('currentUp');
-          this.num = 200;
-          localStorage.setItem('currentUp',String(this.num));
+        if(this.num>=300 ){
+          this.czyMozeszVote = true;
+          if(this.czyMozeszVote){
+            this.num = 300;
+            localStorage.removeItem('currentUp');
+            localStorage.setItem('currentUp', String(this.num));
+          }
+        }else {
+          this.num = Number(localStorage['currentUp']);
+          this.num = this.num + 1;
+          localStorage.setItem('currentUp', String(this.num));
         }
-        this.num = Number(localStorage['currentUp']);
-        this.num = this.num+1;
-        localStorage.setItem('currentUp',String(this.num));
       }
       },1000);
   }
@@ -104,12 +101,12 @@ export class AppComponent implements OnInit{
   addSongToQueueTab(track: Track){
     this.czyPowtarzaSie = false;
     this.tracksQueue.forEach(data=>{
-      if(data.name == track.name){
+      if(data.trackJson.name == track.name){
         this.czyPowtarzaSie = true;
       }
     });
 
-    if(this.tracksQueue.length<=9 && this.czyPowtarzaSie == false) {
+    if(this.tracksQueue.length<=9 && !this.czyPowtarzaSie) {
       this.userService.addSongToQueue(track).subscribe(data => {
         this.updateList();
         if(this.tracksQueue.length>=9){
@@ -127,7 +124,8 @@ export class AppComponent implements OnInit{
   }
   setTimeOfCurrentSong(){
     this.jakiprocent = this.trackCurrent.durationMs/this.trackCurrent.progressMs*100;
-   }
+
+  }
 
   search() {
     if (this.imie_wyszukane !== ''){
@@ -159,19 +157,6 @@ export class AppComponent implements OnInit{
         }
       }
     }
-    searchDuplicate() {
-    this.tracks.filter((data)=>{
-      if(this.tracks.forEach((data)=>{
-        return data.name;
-      }) == data.name) {
-        return null;
-      }else{
-        return data;
-      }
-        });
-    }
-
-
    msToTime(duration: number) {
     var milliseconds = Math.floor((duration % 1000) / 100),
       seconds: any = Math.floor((duration / 1000) % 60),
@@ -184,14 +169,14 @@ export class AppComponent implements OnInit{
 
     return  minutes + ":" + seconds ;
   }
-  addVoteToSong(track: Track){
-    this.userService.addVoteToSong(track).subscribe((data)=>{
-      console.log(data);
-    })
-  }
-   setVotesOnSongs(){
-      this.userService.getVoteOnSongs().pipe(map( response => {
-          this.trackVotesQueue = response;
-        }));
+  addVoteOnSong(name: string){
+    if(this.czyMozeszVote) {
+      this.userService.sendVoteOnSong(name).subscribe((data) => {
+      })
+      this.num = 0
+      localStorage.removeItem('currentUp');
+      localStorage.setItem('currentUp', String(this.num));
+      this.czyMozeszVote = false;
+    }
   }
 }
