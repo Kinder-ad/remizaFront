@@ -14,8 +14,8 @@ export class SpotifyServiceService {
   private url: string;
 
   constructor(private http: HttpClient) {
-    // this.url = 'https://remiza-backend.herokuapp.com';
-    this.url = 'http://localhost:8080'
+    this.url = 'https://remiza-backend.herokuapp.com';
+    // this.url = 'http://localhost:8080'
   }
 
   getSongs(): Observable<Track[]> {
