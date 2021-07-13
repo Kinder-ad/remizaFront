@@ -1,4 +1,9 @@
 .myDIV {
-  height:600px;
+  height:350px;
   overflow-y:scroll;
 }
+
+td, th {
+  padding-bottom: 0px;
+}
+

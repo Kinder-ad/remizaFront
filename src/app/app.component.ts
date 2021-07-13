@@ -97,6 +97,9 @@ export class AppComponent implements OnInit{
     this.userService.getQueue().subscribe((data => {
       this.tracksQueue = data;
     }))
+    this.userService.getVote().subscribe((data)=>{
+      this.counterVote
+    })
   }
   addSongToQueueTab(track: Track){
     this.czyPowtarzaSie = false;
@@ -143,19 +146,22 @@ export class AppComponent implements OnInit{
     }
   }
   voteSkip() {
-    if(localStorage.getItem('currentVote') === null){
-      localStorage.setItem('currentVote',this.trackCurrent.name);
-      this.userService.sendVote().subscribe((data) => {
-        this.counterVote = data;
-      });
-    }else{
-      if(this.trackCurrent.name != localStorage.getItem('currentVote')){
-        localStorage.setItem('currentVote',this.trackCurrent.name);
-        this.userService.sendVote().subscribe((data) => {
+    // if(localStorage.getItem('currentVote') === null){
+    //   localStorage.setItem('currentVote',this.trackCurrent.name);
+    //   this.userService.sendVote().subscribe((data) => {
+    //     this.counterVote = data;
+    //   });
+    // }else{
+    //   if(this.trackCurrent.name != localStorage.getItem('currentVote')){
+    //     localStorage.setItem('currentVote',this.trackCurrent.name);
+    //     this.userService.sendVote().subscribe((data) => {
+    //       this.counterVote = data;
+    //     });
+    //     }
+    //   }
+    this.userService.sendVote().subscribe((data) => {
           this.counterVote = data;
         });
-        }
-      }
     }
    msToTime(duration: number) {
     var milliseconds = Math.floor((duration % 1000) / 100),

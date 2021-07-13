@@ -6,7 +6,7 @@
 
 
 <div class="row" >
-  <div class="col s10 offset-s1 circle">
+  <div class="col s12 circle">
 <div class="card horizontal   orange lighten-2" style="height: 140px" style="background-image: url('/assets/image/gradienta-n2XqPm7Bqhk-unsplash.jpg')">
   <div class="card-image" >
     <img width="100px" height="100px"  src="{{trackCurrent.url}}">
@@ -37,7 +37,7 @@
 </div>
 
 <div class="row">
-  <div class="col s12 m6">
+  <div class="col s12 m5 offset-m1">
     <div class="card-panel orange lighten-2">
       <h3 style="margin-top: 10px">Lista {{this.tracks.length}}</h3>
 
@@ -53,12 +53,15 @@
   </thead>
   <tbody *ngFor="let track of tracks">
   <tr>
-    <td><img width="100px" height="100px"  src="{{track.url}}"> </td>
-    <td>{{track.name}}</td>
     <td>
-      <a *ngIf="this.tracksQueue.length<=9"><button class="waves-effect btn-flat light-green btn-small"  (click)="addSongToQueueTab(track)">Dodaj</button></a>
-      <button *ngIf="this.tracksQueue.length>9" class="waves-effect btn-flat materialize-red btn-small">Pełna</button>
+      <img width="40" height="40"  src="{{track.url}}">
+      <button style="padding-left: 2px; padding-right: 2px" *ngIf="this.tracksQueue.length>9" class="waves-effect btn-flat materialize-red btn-small">Pełna</button>
     </td>
+    <td style="font-size: 15px">{{track.name}}</td>
+    <td>
+      <a *ngIf="this.tracksQueue.length<=9"><button style="padding-left: 2px; padding-right: 2px" class="waves-effect btn-flat light-green btn-small"  (click)="addSongToQueueTab(track)">Dodaj</button></a>
+    </td>
+
   </tr>
   </tbody>
 </table>
@@ -66,11 +69,11 @@
   </div>
   </div>
   <div class="row">
-  <div class="col s12 m6">
+  <div class="col s12 m5">
     <div class="card-panel orange lighten-2">
 
     <h3>Kolejka {{this.tracksQueue.length}}/10 <a *ngIf="this.tracksQueue.length>9" class="red-text">ZAPEŁNIONA</a></h3>
-      <div class="myDIV" style="height: 634px">
+      <div class="myDIV" style="height: 600px">
     <table>
       <thead>
       <div *ngIf="czyMozeszVote===true">MOŻESZ</div>
@@ -83,8 +86,8 @@
       </thead>
       <tbody *ngFor="let track of this.tracksQueue">
       <tr>
-        <td><img width="100px" height="100px"  src="{{track.trackJson.url}}"></td>
-        <td>{{track.trackJson.name}}</td>
+        <td><img width="70" height="70px"  src="{{track.trackJson.url}}"></td>
+        <td style="font-size: 15px">{{track.trackJson.name}}</td>
         <td> <button [ngClass]="czyMozeszVote ? 'waves-effect btn-flat green btn-small' : 'waves-effect btn-flat red btn-small'" class="waves-effect btn-flat red btn-small"  (click)="addVoteOnSong(track.trackJson.name)">{{track.ile_glosow}}/5</button>
         </td>
       </tr>
