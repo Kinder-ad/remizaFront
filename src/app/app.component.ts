@@ -55,9 +55,6 @@ export class AppComponent implements OnInit{
         if(this.trackCurrent.name!=data.name){
           //odswiezenie vote
           this.userService.clearVote().subscribe();
-          this.userService.getVote().subscribe((data)=>{
-            this.counterVote = data;
-          });
         }
         this.trackCurrent = data;
         //progress bar
@@ -68,8 +65,9 @@ export class AppComponent implements OnInit{
         if(this.msToTime(this.trackCurrent.durationMs)>=this.msToTime(this.trackCurrent.progressMs-9000)){
           this.userService.addSong(this.tracksQueue[0].trackJson);
         }
-
-
+      });
+      this.userService.getVote().subscribe((data)=>{
+        this.counterVote = data;
       });
     },1000);
 
