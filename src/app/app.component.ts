@@ -63,16 +63,15 @@ export class AppComponent implements OnInit{
         //progress bar
         this.setTimeOfCurrentSong();
         //odswiezenie listy
-        this.updateList();
 
         if(this.msToTime(this.trackCurrent.durationMs)>=this.msToTime(this.trackCurrent.progressMs-9000)){
           this.userService.addSong(this.tracksQueue[0].trackJson);
         }
-
-
       });
     },1000);
-
+    setInterval(()=>{
+      this.updateList();
+    },500);
 
     setInterval(() => {
       if(localStorage.getItem('currentUp') === null || isNaN(Number(localStorage.getItem('currentUp')))){
@@ -98,7 +97,7 @@ export class AppComponent implements OnInit{
       this.tracksQueue = data;
     }))
     this.userService.getVote().subscribe((data)=>{
-      this.counterVote
+      this.counterVote = data;
     })
   }
   addSongToQueueTab(track: Track){
