@@ -84,7 +84,7 @@ export class AppComponent implements OnInit{
           localStorage.setItem('currentUp', String(this.num));
         }
       }
-      },2000);
+      },1000);
   }
   updateList(){
     this.userService.getQueue().subscribe((data => {
