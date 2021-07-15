@@ -52,35 +52,29 @@ export class AppComponent implements OnInit{
     });
     setInterval(()=>{
       this.userService.getCurrentTrack().subscribe((data)=> {
-        if(this.trackCurrent.name!=data.name){
-          //odswiezenie vote
-          this.userService.clearVote().subscribe();
-          this.userService.getVote().subscribe((data)=>{
-            this.counterVote = data;
-          });
+        if(data!=null) {
+          this.trackCurrent = data;
         }
-        this.trackCurrent = data;
         //progress bar
         this.setTimeOfCurrentSong();
-        //odswiezenie listy
-
+        //zmiana nuty
         if(this.msToTime(this.trackCurrent.durationMs)>=this.msToTime(this.trackCurrent.progressMs-9000)){
-          this.userService.addSong(this.tracksQueue[0].trackJson);
+          if(this.tracksQueue.length!=0) {
+            this.userService.addSong(this.tracksQueue[0].trackJson);
+          }
         }
-      });
+      },);
     },1000);
-    setInterval(()=>{
-      this.updateList();
-    },500);
 
     setInterval(() => {
+      this.updateList();
       if(localStorage.getItem('currentUp') === null || isNaN(Number(localStorage.getItem('currentUp')))){
         localStorage.setItem('currentUp',String(this.num));
       }else {
-        if(this.num>=300 ){
+        if(this.num>=10){
           this.czyMozeszVote = true;
           if(this.czyMozeszVote){
-            this.num = 300;
+            this.num = 10;
             localStorage.removeItem('currentUp');
             localStorage.setItem('currentUp', String(this.num));
           }
@@ -90,7 +84,7 @@ export class AppComponent implements OnInit{
           localStorage.setItem('currentUp', String(this.num));
         }
       }
-      },1000);
+      },2000);
   }
   updateList(){
     this.userService.getQueue().subscribe((data => {
@@ -158,10 +152,8 @@ export class AppComponent implements OnInit{
         });
         }
       }
-    // this.userService.sendVote().subscribe((data) => {
-    //       this.counterVote = data;
-    //     });
     }
+
    msToTime(duration: number) {
     var milliseconds = Math.floor((duration % 1000) / 100),
       seconds: any = Math.floor((duration / 1000) % 60),
@@ -174,11 +166,10 @@ export class AppComponent implements OnInit{
 
     return  minutes + ":" + seconds ;
   }
-  addVoteOnSong(name: string){
+  addSongCounter(track: Track){
     if(this.czyMozeszVote) {
-      this.userService.sendVoteOnSong(name).subscribe((data) => {
-      })
       this.num = 0
+      this.addSongToQueueTab(track);
       localStorage.removeItem('currentUp');
       localStorage.setItem('currentUp', String(this.num));
       this.czyMozeszVote = false;

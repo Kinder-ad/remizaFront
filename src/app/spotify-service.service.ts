@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
+import {Observable, throwError} from "rxjs";
 import {Track} from "../domain/Track";
 import {TrackCurrent} from "../domain/TrackCurrent";
-import {tap} from "rxjs/operators";
+import {catchError, retry, tap} from "rxjs/operators";
 import {TrackPack} from "../domain/TrackPack";
 
 
@@ -55,9 +55,7 @@ export class SpotifyServiceService {
   clearVote(){
     return this.http.get(this.url+'/song/queue/clearVote');
   }
-
-  sendVoteOnSong(name: string) {
-    return this.http.get(this.url+'/song/queue/'+name);
+  skip(){
+    return this.http.get(this.url+'/skip');
   }
-
 }
