@@ -170,7 +170,6 @@ export class AppComponent implements OnInit{
     if(this.czyMozeszVote) {
       this.num = 0
       this.addSongToQueueTab(track);
-      localStorage.removeItem('currentUp');
       localStorage.setItem('currentUp', String(this.num));
       this.czyMozeszVote = false;
     }

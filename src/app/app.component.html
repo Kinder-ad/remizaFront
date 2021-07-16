@@ -4,7 +4,6 @@
 <!--  </a>-->
 <!--</nav>-->
 
-fdsfsd
 <div class="row" >
   <div class="col s12 circle">
 <div class="card horizontal   orange lighten-2" style="height: 140px" style="background-image: url('/assets/image/gradienta-n2XqPm7Bqhk-unsplash.jpg')">
@@ -53,17 +52,30 @@ fdsfsd
     <th></th>
   </tr>
   </thead>
-  <tbody *ngFor="let track of tracks">
-  <tr  [ngClass]="this.tracksQueue.length>9 ? 'red' : 'null' ">
-    <td>
-      <img width="40" height="40"  src="{{track.url}}">
-    </td>
-    <td style="font-size: 15px">{{track.name}}</td>
-    <td>
-     <button [ngClass]="czyMozeszVote ? 'waves-effect btn-flat green btn-small' : 'waves-effect btn-flat red btn-small'" style="padding-left: 2px; padding-right: 2px"   (click)="addSongCounter(track)">Dodaj</button>
-    </td>
-
-  </tr>
+  <tbody *ngFor="let track of tracks" style="height: 50px">
+<!--  <tr  [ngClass]="this.tracksQueue.length>9 ? 'red' : 'null' ">-->
+<!--    <td>-->
+<!--      <img width="40" height="40"  src="{{track.url}}">-->
+<!--    </td>-->
+<!--    <td style="font-size: 15px">{{track.name}}</td>-->
+<!--    <td>-->
+<!--     <button [ngClass]="czyMozeszVote ? 'waves-effect btn-flat green btn-small' : 'waves-effect btn-flat red btn-small'" style="padding-left: 2px; padding-right: 2px"   (click)="addSongCounter(track)">Dodaj</button>-->
+<!--    </td>-->
+    <div class="row" style="height: 40px">
+      <div class="col s2">
+        <div class="card-image">
+          <img width="60" height="60"  src="{{track.url}}">
+        </div>
+      </div>
+      <div class="col s7 offset-s1" tyle="font-size: 15px">
+        {{track.name}}
+      </div>
+      <div class="col s2">
+        <button [ngClass]="czyMozeszVote ? 'waves-effect btn-flat green btn-small' : 'waves-effect btn-flat red btn-small'" style="padding-left: 2px; padding-right: 2px"   (click)="addSongCounter(track)">Dodaj</button>
+      </div>
+    </div>
+<hr style="margin-top: 0px">
+<!--  </tr>-->
   </tbody>
 </table>
       </div>
@@ -74,7 +86,7 @@ fdsfsd
     <div class="card-panel orange lighten-2">
 
     <h3>Kolejka {{this.tracksQueue.length}}/10 <a *ngIf="this.tracksQueue.length>9" class="red-text">ZAPEŁNIONA</a></h3>
-      <div class="myDIV" style="height: 600px">
+      <div class="myDIV" style="height: 409px">
     <table>
       <thead>
       <tr>
