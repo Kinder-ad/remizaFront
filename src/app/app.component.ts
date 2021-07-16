@@ -66,7 +66,9 @@ export class AppComponent implements OnInit{
           }
         }
       },);
-    },4000);
+
+
+    },2000);
 
     setInterval(() => {
       this.updateList();
@@ -99,7 +101,7 @@ export class AppComponent implements OnInit{
   addSongToQueueTab(track: Track){
     this.czyPowtarzaSie = false;
     this.tracksQueue.forEach(data=>{
-      if(data.trackJson.name == track.name){
+      if(data.trackJson.uri == track.uri){
         this.czyPowtarzaSie = true;
       }
     });
