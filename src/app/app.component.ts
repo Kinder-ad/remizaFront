@@ -23,6 +23,8 @@ export class AppComponent implements OnInit{
   counterVote: number;
   num: number = 0;
   czyMozeszVote: boolean;
+  searchFilter: any = '';
+
   constructor(private userService: SpotifyServiceService){
     this.tracks = [];
     this.tracksQueue = [];
@@ -64,7 +66,7 @@ export class AppComponent implements OnInit{
           }
         }
       },);
-    },1000);
+    },4000);
 
     setInterval(() => {
       this.updateList();
@@ -80,11 +82,11 @@ export class AppComponent implements OnInit{
           }
         }else {
           this.num = Number(localStorage['currentUp']);
-          this.num = this.num + 1;
+          this.num = this.num + 3;
           localStorage.setItem('currentUp', String(this.num));
         }
       }
-      },1000);
+      },3000);
   }
   updateList(){
     this.userService.getQueue().subscribe((data => {
@@ -123,21 +125,21 @@ export class AppComponent implements OnInit{
 
   }
 
-  search() {
-    if (this.imie_wyszukane !== ''){
-      this.tracks = this.tracks.filter(data => {
-        this.wyszukiwarka = data.name
-        return this.wyszukiwarka
-          .toLocaleLowerCase()
-          .match(this.imie_wyszukane
-            .replace(' ', '')
-            .toLocaleLowerCase()
-          );
-      });
-    }else if (this.imie_wyszukane === '') {
-      this.ngOnInit();
-    }
-  }
+  // search() {
+  //   if (this.imie_wyszukane !== ''){
+  //     this.tracks = this.tracks.filter(data => {
+  //       this.wyszukiwarka = data.name
+  //       return this.wyszukiwarka
+  //         .toLocaleLowerCase()
+  //         .match(this.imie_wyszukane
+  //           .replace(' ', '')
+  //           .toLocaleLowerCase()
+  //         );
+  //     });
+  //   }else if (this.imie_wyszukane === '') {
+  //     this.ngOnInit();
+  //   }
+  // }
   voteSkip() {
     if(localStorage.getItem('currentVote') === null){
       localStorage.setItem('currentVote',this.trackCurrent.name);

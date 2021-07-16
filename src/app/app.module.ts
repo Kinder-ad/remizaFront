@@ -6,8 +6,9 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {RouterModule} from "@angular/router";
 import {StorageServiceModule} from "ngx-webstorage-service";
-import { MinutetosecondsPipe } from './minutetoseconds.pipe';
-
+import { MinutetosecondsPipe } from './_pipe/minutetoseconds.pipe';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { SearchFilterPipe } from './_pipe/search.pipe';
 function RoutingAppModule() {
 
 }
@@ -15,7 +16,8 @@ function RoutingAppModule() {
 @NgModule({
   declarations: [
     AppComponent,
-    MinutetosecondsPipe
+    MinutetosecondsPipe,
+    SearchFilterPipe,
   ],
   imports: [
     BrowserModule,
