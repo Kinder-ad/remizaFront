@@ -64,6 +64,8 @@ export class AppComponent implements OnInit{
           if(this.tracksQueue.length!=0) {
             this.userService.addSong(this.tracksQueue[0].trackJson);
             this.userService.clearVote();
+          }else{
+            this.userService.clearVote();
           }
         }
       },);
