@@ -63,6 +63,7 @@ export class AppComponent implements OnInit{
         if(this.msToTime(this.trackCurrent.durationMs)>=this.msToTime(this.trackCurrent.progressMs-9000)){
           if(this.tracksQueue.length!=0) {
             this.userService.addSong(this.tracksQueue[0].trackJson);
+            this.userService.clearVote();
           }
         }
       },);
