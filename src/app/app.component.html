@@ -40,7 +40,7 @@
     <div class="card-panel orange lighten-2">
       <h3 style="margin-top: 10px">Lista {{this.tracks.length}}</h3>
       <input type="text" class="form-control mb-4" placeholder="Search" [(ngModel)]="searchFilter" id="listSearch">
-      <p style="margin-top: 2px; margin-bottom: 0px">{{this.num | minutetoseconds}} /5:00min</p>
+      <h6 style="margin-top: 2px; margin-bottom: 0px">{{this.num | minutetoseconds}} /5:00min</h6>
 
       <div class="myDIV">
     <table>
@@ -84,7 +84,7 @@
   <div class="col s12 m5">
     <div class="card-panel orange lighten-2">
 
-    <h3>Kolejka {{this.tracksQueue.length}}/10 <a *ngIf="this.tracksQueue.length>9" class="red-text">ZAPEŁNIONA</a></h3>
+    <h3>Kolejka {{this.tracksQueue.length}}/15 <a *ngIf="this.tracksQueue.length>9" class="red-text">ZAPEŁNIONA</a></h3>
       <div class="myDIV" style="height: 409px">
     <table>
       <thead>
