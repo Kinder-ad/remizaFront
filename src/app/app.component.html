@@ -30,7 +30,7 @@
 <div class="row">
   <div class="col s10 offset-s1">
     <div class="card-panel orange lighten-2">
-      <a class="waves-effect grey darken-2 btn-large" style="width: 100%"  (click)="voteSkip()">Skip vote {{counterVote}}/10</a>
+      <a class="waves-effect grey darken-2 btn-large" style="width: 100%"  (click)="voteSkip()">Skip vote {{counterVote}}/15</a>
     </div>
   </div>
 </div>
@@ -84,7 +84,7 @@
   <div class="col s12 m5">
     <div class="card-panel orange lighten-2">
 
-    <h3>Kolejka {{this.tracksQueue.length}}/15 <a *ngIf="this.tracksQueue.length>9" class="red-text">ZAPEŁNIONA</a></h3>
+    <h3>Kolejka {{this.tracksQueue.length}}/10 <a *ngIf="this.tracksQueue.length>9" class="red-text">ZAPEŁNIONA</a></h3>
       <div class="myDIV" style="height: 409px">
     <table>
       <thead>
