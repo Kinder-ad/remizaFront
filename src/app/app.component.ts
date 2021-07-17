@@ -80,10 +80,10 @@ export class AppComponent implements OnInit{
       if(localStorage.getItem('currentUp') === null || isNaN(Number(localStorage.getItem('currentUp')))){
         localStorage.setItem('currentUp',String(this.num));
       }else {
-        if(this.num>=300){
+        if(this.num>=90){
           this.czyMozeszVote = true;
           if(this.czyMozeszVote){
-            this.num = 300;
+            this.num = 90;
             localStorage.removeItem('currentUp');
             localStorage.setItem('currentUp', String(this.num));
           }
