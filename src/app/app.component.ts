@@ -64,10 +64,17 @@ export class AppComponent implements OnInit{
       if(localStorage.getItem('currentUp') === null || isNaN(Number(localStorage.getItem('currentUp')))){
         localStorage.setItem('currentUp',String(this.songTimeInterval));
       }else {
+<<<<<<< HEAD
         if(this.songTimeInterval>=30){
           this.isAllowVote = true;
           if(this.isAllowVote){
             this.songTimeInterval = 30;
+=======
+        if(this.num>=30){
+          this.czyMozeszVote = true;
+          if(this.czyMozeszVote){
+            this.num = 30;
+>>>>>>> 71ab526f34d3132cab551d1e5433447fb20f03be
             localStorage.removeItem('currentUp');
             localStorage.setItem('currentUp', String(this.songTimeInterval));
           }
