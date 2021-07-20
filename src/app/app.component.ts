@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {SpotifyServiceService} from "./spotify-service.service";
+import {SpotifyService} from "./spotify.service";
 import {Track} from '../domain/Track';
 import {TrackCurrent} from "../domain/TrackCurrent";
 import {map} from "rxjs/operators";
@@ -10,36 +10,22 @@ import {TrackPack} from "../domain/TrackPack";
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit{
-  title = 'RemizaFronte';
   tracks: Track[] = [];
   tracksQueue: TrackPack[] = [];
-  trackCurrent: TrackCurrent;
-  czyZapelniona: boolean;
-  czyPowtarzaSie: boolean;
-  kolejka: boolean;
-  jakiprocent: Number;
-  imie_wyszukane: any;
-  wyszukiwarka: any;
-  counterVote: number;
-  num: number = 0;
-  czyMozeszVote: boolean;
+  trackCurrent: TrackCurrent = new TrackCurrent();
+  isFull: boolean = false;
+  isRepeat: boolean = false;
+  whatPercent: number = 0;
+  counterVote: number = 0;
+  songTimeInterval: number = 0;
+  isAllowVote: boolean = false;
   searchFilter: any = '';
 
-  constructor(private userService: SpotifyServiceService){
-    this.tracks = [];
-    this.tracksQueue = [];
-    this.czyZapelniona = false;
-    this.czyPowtarzaSie = false;
-    this.trackCurrent = new TrackCurrent();
-    this.kolejka = false;
-    this.jakiprocent = 0;
-    this.counterVote = 0;
-    this.czyMozeszVote = false;
+  constructor(private userService: SpotifyService){
   }
 
 
   ngOnInit(): void {
-    this.userService.authorize();
     this.userService.getSongs().subscribe((data => {
       this.tracks = data;
     }));
@@ -57,16 +43,14 @@ export class AppComponent implements OnInit{
         if(data!=null) {
           this.trackCurrent = data;
         }
-        //progress bar
         this.setTimeOfCurrentSong();
-        //zmiana nuty
+
         if(this.msToTime(this.trackCurrent.durationMs)>=this.msToTime(this.trackCurrent.progressMs-9000)){
           if(this.tracksQueue.length!=0) {
             this.userService.addSong(this.tracksQueue[0].trackJson);
             this.userService.clearVote();
           }else{
             this.userService.clearVote().subscribe(()=>{
-              console.log(data);
             })
           }
         }
@@ -78,23 +62,24 @@ export class AppComponent implements OnInit{
     setInterval(() => {
       this.updateList();
       if(localStorage.getItem('currentUp') === null || isNaN(Number(localStorage.getItem('currentUp')))){
-        localStorage.setItem('currentUp',String(this.num));
+        localStorage.setItem('currentUp',String(this.songTimeInterval));
       }else {
-        if(this.num>=30){
-          this.czyMozeszVote = true;
-          if(this.czyMozeszVote){
-            this.num = 30;
+        if(this.songTimeInterval>=30){
+          this.isAllowVote = true;
+          if(this.isAllowVote){
+            this.songTimeInterval = 30;
             localStorage.removeItem('currentUp');
-            localStorage.setItem('currentUp', String(this.num));
+            localStorage.setItem('currentUp', String(this.songTimeInterval));
           }
         }else {
-          this.num = Number(localStorage['currentUp']);
-          this.num = this.num + 3;
-          localStorage.setItem('currentUp', String(this.num));
+          this.songTimeInterval = Number(localStorage['currentUp']);
+          this.songTimeInterval = this.songTimeInterval + 3;
+          localStorage.setItem('currentUp', String(this.songTimeInterval));
         }
       }
       },3000);
   }
+
   updateList(){
     this.userService.getQueue().subscribe((data => {
       this.tracksQueue = data;
@@ -103,50 +88,36 @@ export class AppComponent implements OnInit{
       this.counterVote = data;
     })
   }
-  addSongToQueueTab(track: Track){
-    this.czyPowtarzaSie = false;
+
+  addSongToQueueWeb(track: Track){
+    this.isRepeat = false;
     this.tracksQueue.forEach(data=>{
       if(data.trackJson.uri == track.uri){
-        this.czyPowtarzaSie = true;
+        this.isRepeat = true;
       }
     });
 
-    if(this.tracksQueue.length<=9 && !this.czyPowtarzaSie) {
+    if(this.tracksQueue.length<=9 && !this.isRepeat) {
       this.userService.addSongToQueue(track).subscribe(data => {
         this.updateList();
         if(this.tracksQueue.length>=9){
-          this.czyZapelniona = true;
+          this.isFull = true;
         }
       });
     }
 
   }
-  deleteSongFromQueue(track: Track){
+  deleteSongFromQueueWeb(track: Track){
     this.userService.deleteSongQueue(track).subscribe(data=>{
-      this.czyZapelniona = false;
+      this.isFull = false;
       this.updateList();
     })
   }
   setTimeOfCurrentSong(){
-    this.jakiprocent = this.trackCurrent.durationMs/this.trackCurrent.progressMs*100;
+    this.whatPercent = this.trackCurrent.durationMs/this.trackCurrent.progressMs*100;
 
   }
 
-  // search() {
-  //   if (this.imie_wyszukane !== ''){
-  //     this.tracks = this.tracks.filter(data => {
-  //       this.wyszukiwarka = data.name
-  //       return this.wyszukiwarka
-  //         .toLocaleLowerCase()
-  //         .match(this.imie_wyszukane
-  //           .replace(' ', '')
-  //           .toLocaleLowerCase()
-  //         );
-  //     });
-  //   }else if (this.imie_wyszukane === '') {
-  //     this.ngOnInit();
-  //   }
-  // }
   voteSkip() {
     if(localStorage.getItem('currentVote') === null){
       localStorage.setItem('currentVote',this.trackCurrent.name);
@@ -176,11 +147,11 @@ export class AppComponent implements OnInit{
     return  minutes + ":" + seconds ;
   }
   addSongCounter(track: Track){
-    if(this.czyMozeszVote) {
-      this.num = 0
-      this.addSongToQueueTab(track);
-      localStorage.setItem('currentUp', String(this.num));
-      this.czyMozeszVote = false;
+    if(this.isAllowVote) {
+      this.songTimeInterval = 0
+      this.addSongToQueueWeb(track);
+      localStorage.setItem('currentUp', String(this.songTimeInterval));
+      this.isAllowVote = false;
     }
   }
 }
