@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {SpotifyService} from "./spotify.service";
 import {Track} from '../domain/Track';
 import {TrackCurrent} from "../domain/TrackCurrent";
-import {map} from "rxjs/operators";
 import {TrackPack} from "../domain/TrackPack";
 @Component({
   selector: 'app-root',
@@ -45,7 +44,7 @@ export class AppComponent implements OnInit{
         }
         this.setTimeOfCurrentSong();
 
-        if(this.msToTime(this.trackCurrent.durationMs)>=this.msToTime(this.trackCurrent.progressMs-9000)){
+        if(this.msToTime(this.trackCurrent.durationMs)>=this.msToTime(this.trackCurrent.progressMs-6000)){
           if(this.tracksQueue.length!=0) {
             this.userService.addSong(this.tracksQueue[0].trackJson);
             this.userService.clearVote();
@@ -55,8 +54,6 @@ export class AppComponent implements OnInit{
           }
         }
       },);
-
-
     },2000);
 
     setInterval(() => {
@@ -64,17 +61,10 @@ export class AppComponent implements OnInit{
       if(localStorage.getItem('currentUp') === null || isNaN(Number(localStorage.getItem('currentUp')))){
         localStorage.setItem('currentUp',String(this.songTimeInterval));
       }else {
-<<<<<<< HEAD
-        if(this.songTimeInterval>=30){
+        if(this.songTimeInterval+3>=10){
           this.isAllowVote = true;
           if(this.isAllowVote){
             this.songTimeInterval = 30;
-=======
-        if(this.num>=30){
-          this.czyMozeszVote = true;
-          if(this.czyMozeszVote){
-            this.num = 30;
->>>>>>> 71ab526f34d3132cab551d1e5433447fb20f03be
             localStorage.removeItem('currentUp');
             localStorage.setItem('currentUp', String(this.songTimeInterval));
           }
@@ -84,7 +74,7 @@ export class AppComponent implements OnInit{
           localStorage.setItem('currentUp', String(this.songTimeInterval));
         }
       }
-      },3000);
+    },3000);
   }
 
   updateList(){

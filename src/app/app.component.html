@@ -24,7 +24,7 @@
 <div class="row">
   <div class="col s10 offset-s1">
     <div class="card-panel orange lighten-2">
-      <a class="waves-effect grey darken-2 btn-large" style="width: 100%"  (click)="voteSkip()">Skip vote {{counterVote}}/15</a>
+      <a class="waves-effect grey darken-2 btn-large" style="width: 100%"  (click)="voteSkip()">Skip vote {{counterVote}}/10</a>
     </div>
   </div>
 </div>
@@ -34,11 +34,7 @@
     <div class="card-panel orange lighten-2">
       <h3 style="margin-top: 10px">Lista {{this.tracks.length}}</h3>
       <input type="text" class="form-control mb-4" placeholder="Search" [(ngModel)]="searchFilter" id="listSearch">
-<<<<<<< HEAD
       <h6 style="margin-top: 2px; margin-bottom: 0px">{{this.songTimeInterval | secondsToMinutes}} /0:30min</h6>
-=======
-      <h6 style="margin-top: 2px; margin-bottom: 0px">{{this.num | minutetoseconds}} /00:30min</h6>
->>>>>>> 71ab526f34d3132cab551d1e5433447fb20f03be
 
       <div class="myDIV">
     <table>

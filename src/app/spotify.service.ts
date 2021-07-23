@@ -19,43 +19,40 @@ export class SpotifyService {
   }
 
   getSongs(): Observable<Track[]> {
-    return this.http.get<Track[]>(this.url+'/getSongs');
+    return this.http.get<Track[]>(this.url+'/song/getSongs');
   }
 
   public addSong(track: Track) {
     console.log(track.name)
-    return this.http.post(this.url+'/song/add/',track).subscribe((data)=>{
+    return this.http.post(this.url+'/song',track).subscribe((data)=>{
       console.log("BŁĄD: ",data)
     })
   }
   public addSongToQueue(track: Track) {
     console.log(track)
-    return this.http.post<TrackPack>(this.url+'/song',track);
+    return this.http.post<TrackPack>(this.url+'/queue',track);
   }
   getQueue(): Observable<TrackPack[]> {
-    return this.http.get<TrackPack[]>(this.url+'/getQueue');
+    return this.http.get<TrackPack[]>(this.url+'/queue');
   }
 
   deleteSongQueue(track: Track) {
-    return this.http.delete<Track>(this.url+'/song/queue/'+track.name);
+    return this.http.delete<Track>(this.url+'/queue/'+track.name);
   }
 
   getCurrentTrack() {
     return this.http.get<TrackCurrent>(this.url+'/song/current');
   }
   public sendVote(){
-    return this.http.get<number>(this.url+'/song/queue/skipvote');
+    return this.http.post<number>(this.url+'/queue/vote',1);
   }
   getVote(){
-    return this.http.get<number>(this.url+'/song/queue/getvote');
-  }
-  authorize(){
-    return this.http.get<number>(this.url+'/aut');
+    return this.http.get<number>(this.url+'/queue/vote');
   }
   clearVote(){
-    return this.http.get(this.url+'/song/queue/clearVote');
+    return this.http.get(this.url+'/queue/clearVote');
   }
   skip(){
-    return this.http.get(this.url+'/skip');
+    return this.http.get(this.url+'/queue/skip');
   }
 }
